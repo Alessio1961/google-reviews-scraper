@@ -56,10 +56,11 @@ class ReviewExporter:
             # Definizione struttura DBF
             # Visual FoxPro ha limite di 254 caratteri per campo Character
             # Usiamo Memo (M) per testi lunghi
+            # IMPORTANTE: i nomi campo DBF hanno limite di 10 caratteri
             table = dbf.Table(
                 dbf_file,
-                'reviewer_name C(100); stars N(1,0); text M; date C(50); '
-                'owner_response M; response_date C(50)',
+                'nome C(100); stelle N(1,0); testo M; data C(50); '
+                'risposta M; data_risp C(50)',
                 codepage='cp1252'  # Windows-1252 per compatibilità VFP
             )
             
@@ -76,12 +77,12 @@ class ReviewExporter:
                 
                 # Aggiungi record
                 table.append({
-                    'reviewer_name': reviewer_name,
-                    'stars': stars,
-                    'text': text,
-                    'date': date,
-                    'owner_response': owner_response,
-                    'response_date': response_date
+                    'nome': reviewer_name,
+                    'stelle': stars,
+                    'testo': text,
+                    'data': date,
+                    'risposta': owner_response,
+                    'data_risp': response_date
                 })
             
             table.close()

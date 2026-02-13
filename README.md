@@ -93,13 +93,13 @@ USE tutte_recensioni.dbf
 BROWSE
 
 * Filtra recensioni 5 stelle
-SELECT * FROM tutte_recensioni WHERE stars = 5
+SELECT * FROM tutte_recensioni WHERE stelle = 5
 
 * Conta recensioni per stelle
-SELECT stars, COUNT(*) as totale FROM tutte_recensioni GROUP BY stars
+SELECT stelle, COUNT(*) as totale FROM tutte_recensioni GROUP BY stelle
 
 * Cerca parola chiave nel testo
-SELECT * FROM tutte_recensioni WHERE "ottimo" $ LOWER(text)
+SELECT * FROM tutte_recensioni WHERE "ottimo" $ LOWER(testo)
 
 * Esporta in report
 REPORT FORM mio_report TO PRINTER
@@ -123,9 +123,9 @@ BROWSE TITLE "Recensioni Google Maps"
 
 * Statistiche
 ? "Totale recensioni:", RECCOUNT()
-? "Media stelle:", AVERAGE(stars)
+? "Media stelle:", AVERAGE(stelle)
 ? "Recensioni con risposta:", ;
-  RECCOUNT("owner_response <> ''")
+  RECCOUNT("risposta <> ''")
 
 USE
 ```
@@ -146,16 +146,27 @@ IMPORT FROM recensioni.csv TYPE CSV
 
 I file generati contengono i seguenti campi:
 
+### File CSV
+| Campo | Descrizione |
+|-------|-------------|
+| `reviewer_name` | Nome del recensore |
+| `stars` | Numero di stelle (1-5) |
+| `text` | Testo completo della recensione |
+| `date` | Data della recensione |
+| `owner_response` | Risposta del proprietario (se presente) |
+| `response_date` | Data della risposta (se presente) |
+
+### File DBF
 | Campo | Tipo | Dimensione | Descrizione |
 |-------|------|------------|-------------|
-| `reviewer_name` | Character | 100 | Nome del recensore |
-| `stars` | Numeric | 1 | Numero di stelle (1-5) |
-| `text` | Memo | - | Testo completo della recensione |
-| `date` | Character | 50 | Data della recensione |
-| `owner_response` | Memo | - | Risposta del proprietario (se presente) |
-| `response_date` | Character | 50 | Data della risposta (se presente) |
+| `nome` | Character | 100 | Nome del recensore |
+| `stelle` | Numeric | 1 | Numero di stelle (1-5) |
+| `testo` | Memo | - | Testo completo della recensione |
+| `data` | Character | 50 | Data della recensione |
+| `risposta` | Memo | - | Risposta del proprietario (se presente) |
+| `data_risp` | Character | 50 | Data della risposta (se presente) |
 
-**Nota**: I campi `text` e `owner_response` sono di tipo **Memo (M)** nel DBF per supportare testi lunghi.
+**Nota**: I nomi dei campi nel DBF sono abbreviati per rispettare il limite di 10 caratteri del formato dBase. I campi `testo` e `risposta` sono di tipo **Memo (M)** per supportare testi lunghi.
 
 ## 🛠️ Troubleshooting
 
