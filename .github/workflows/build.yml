@@ -1,0 +1,81 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write  # Needed for creating releases
+      actions: read
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+    
+    - name: Install Playwright browsers
+      run: |
+        python -m playwright install chromium
+        python -m playwright install-deps
+    
+    - name: Build EXE with PyInstaller
+      run: |
+        pyinstaller --onefile --name scraper `
+          --hidden-import playwright `
+          --hidden-import dbf `
+          --collect-all playwright `
+          src/main.py
+    
+    - name: Test EXE (version check)
+      run: |
+        .\dist\scraper.exe --help
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: scraper-windows
+        path: dist/scraper.exe
+        retention-days: 30
+    
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/scraper.exe
+        body: |
+          ## Google Reviews Scraper
+          
+          Scarica recensioni da Google Maps in formato CSV e DBF.
+          
+          ### Come usare:
+          1. Scarica `scraper.exe`
+          2. Apri il prompt dei comandi (CMD) nella cartella dove hai scaricato il file
+          3. Esegui: `scraper.exe --url="URL_GOOGLE_MAPS"`
+          
+          ### Esempi:
+          ```
+          scraper.exe --url="https://maps.app.goo.gl/91jma2zHp9mWgG6M6"
+          scraper.exe --url="https://maps.app.goo.gl/91jma2zHp9mWgG6M6" --stars=5
+          ```
+          
+          Vedi il README per la documentazione completa.
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
