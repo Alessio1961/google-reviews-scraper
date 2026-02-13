@@ -2,6 +2,12 @@
 
 Applicazione console Windows per scaricare recensioni da Google Maps e salvarle in formato **CSV** e **DBF** compatibile con **Visual FoxPro**.
 
+---
+
+📖 **[Quick Start Guide](QUICK_START.md)** | 👨‍💻 **[Developer Guide](DEVELOPER_GUIDE.md)** | 💡 **[Examples](examples.py)**
+
+---
+
 ## 📥 Download
 
 **[➡️ Scarica l'ultima versione (scraper.exe)](../../releases/latest)**
