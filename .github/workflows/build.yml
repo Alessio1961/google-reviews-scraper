@@ -38,28 +38,30 @@ jobs:
     
     - name: Build EXE with PyInstaller
       run: |
+        cd src
         pyinstaller --onefile --name scraper `
           --hidden-import playwright `
+          --hidden-import playwright.sync_api `
           --hidden-import dbf `
           --collect-all playwright `
-          src/main.py
+          main.py
     
     - name: Test EXE (version check)
       run: |
-        .\dist\scraper.exe --help
+        .\src\dist\scraper.exe --help
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: scraper-windows
-        path: dist/scraper.exe
+        path: src/dist/scraper.exe
         retention-days: 30
     
     - name: Create Release
       if: startsWith(github.ref, 'refs/tags/')
       uses: softprops/action-gh-release@v1
       with:
-        files: dist/scraper.exe
+        files: src/dist/scraper.exe
         body: |
           ## Google Reviews Scraper
           
