@@ -42,4 +42,4 @@ Thumbs.db
 *.log
 
 # PyInstaller
-*.spec
+# *.spec files are ignored except for src/scraper.spec which is intentional
