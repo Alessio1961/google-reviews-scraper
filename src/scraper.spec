@@ -4,7 +4,7 @@ block_cipher = None
 
 a = Analysis(
     ['main.py'],
-    pathex=['src'],
+    pathex=[],
     binaries=[],
     datas=[],
     hiddenimports=['playwright', 'playwright.sync_api', 'dbf', 'scraper', 'exporters'],
@@ -17,10 +17,6 @@ a = Analysis(
     cipher=block_cipher,
     noarchive=False,
 )
-
-# Add the source files explicitly
-a.datas += [('scraper.py', 'scraper.py', 'DATA')]
-a.datas += [('exporters.py', 'exporters.py', 'DATA')]
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
