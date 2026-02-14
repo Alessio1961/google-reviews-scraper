@@ -39,12 +39,7 @@ jobs:
     - name: Build EXE with PyInstaller
       run: |
         cd src
-        pyinstaller --onefile --name scraper `
-          --hidden-import playwright `
-          --hidden-import playwright.sync_api `
-          --hidden-import dbf `
-          --collect-all playwright `
-          main.py
+        pyinstaller scraper.spec
     
     - name: Test EXE (version check)
       run: |
